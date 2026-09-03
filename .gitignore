@@ -1,0 +1,59 @@
+# ============================================================
+# Sandborn - Unreal Engine
+# ============================================================
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Unreal generated project files
+*.sln
+*.xcodeproj
+*.xcworkspace
+*.VC.db
+*.VC.opendb
+
+# Unreal generated folders
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Generated folders inside plugins
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+
+# Build output
+Build/*
+!Build/
+!Build/**/*.ico
+
+# Packaged builds
+Packaged/
+StagedBuilds/
+
+# Logs / crash data
+*.log
+crashinfo--*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary / backup files
+*.tmp
+*.temp
+*.bak
+*~
+
+# Visual Studio generated solutions
+*.sln
+*.slnx
+UpgradeLog.htm
+UpgradeLog*.htm
