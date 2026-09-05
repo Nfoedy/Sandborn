@@ -3,7 +3,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
-//#include "Transporter.h"
 #include "PressurePlate.generated.h"
 
 
