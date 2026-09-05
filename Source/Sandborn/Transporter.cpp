@@ -1,4 +1,5 @@
 #include "Transporter.h"
+#include "CollectableKey.h"
 #include "PressurePlate.h"
 
 
@@ -48,13 +49,13 @@ void UTransporter::BeginPlay()
 			PressurePlateActor->OnDeactivated.AddDynamic(this, &UTransporter::OnTriggerActorDeactivated);
 			continue;
 		}
-		/*
+		
 		ACollectableKey* KeyActor = Cast<ACollectableKey>(TA);
 		if (KeyActor)
 		{
 			KeyActor->OnCollected.AddDynamic(this, &UTransporter::OnTriggerActorActivated);
 		}
-		*/
+		
 
 	}
 	
