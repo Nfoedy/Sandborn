@@ -40,7 +40,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UCapsuleComponent* Capsule;
 
-	// Static Mesh
+	// Static Mesh component 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
 

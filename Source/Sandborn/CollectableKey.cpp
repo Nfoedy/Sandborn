@@ -24,7 +24,7 @@ ACollectableKey::ACollectableKey()
 	Capsule->SetCapsuleHalfHeight(150.0f);
 	Capsule->SetCapsuleRadius(100.0f);
 
-	//
+	// 
 	CollectAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("CollectAudio"));
 	CollectAudio->SetupAttachment(RootComp);
 	CollectAudio->SetAutoActivate(false);
@@ -45,16 +45,11 @@ void ACollectableKey::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Rotate the mesh
-	Mesh->AddRelativeRotation(
-		FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f)
-	);
+	Mesh->AddRelativeRotation(FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f));
 
 	TArray<AActor*> OverlapActors;
 
-	Capsule->GetOverlappingActors(
-		OverlapActors,
-		ASandbornCharacter::StaticClass()
-	);
+	Capsule->GetOverlappingActors(OverlapActors, ASandbornCharacter::StaticClass());
 
 	if (OverlapActors.Num() > 0)
 	{
