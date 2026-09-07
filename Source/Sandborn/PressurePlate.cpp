@@ -8,17 +8,22 @@ APressurePlate::APressurePlate()
 
 	Activated = false;
 
-	//
+	// creo il root comp
 	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
 	SetRootComponent(RootComp);
 
-	//
+	// creo il trigger mesh ed imposto il rispettivo scale
 	TriggerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TriggerMesh"));
 	TriggerMesh->SetupAttachment(RootComp);
 
-	//
+	// Creo la mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComp);
+
+	// Creao i trasport component
+	Transporter = CreateDefaultSubobject<UTransporter>(TEXT("Transporter"));
+
+
 }
 
 
@@ -28,6 +33,14 @@ void APressurePlate::BeginPlay()
 
 	TriggerMesh->SetVisibility(false);
 	TriggerMesh->SetCollisionProfileName(FName("OverlapAll"));
+
+	// Pressure Plate transport aniamtion
+	FVector Point1 = GetActorLocation();
+	FVector Point2 = Point1 + FVector(0.0f, 0.0f, -10.0f);
+	Transporter->SetPoints(Point1, Point2);
+	
+	
+
 }
 
 
@@ -50,8 +63,8 @@ void APressurePlate::Tick(float DeltaTime)
 			break;
 		}
 
-		FString Msg = FString::Printf(TEXT("Name: %s"), *A->GetName());
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, Msg);
+		//FString Msg = FString::Printf(TEXT("Name: %s"), *A->GetName());
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, Msg);
 	}
 
 	// Se esiste
@@ -60,6 +73,7 @@ void APressurePlate::Tick(float DeltaTime)
 		if (!Activated)
 		{
 			Activated = true;
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, "Attivata");
 			OnActivated.Broadcast();
 		}
 	}
@@ -68,6 +82,7 @@ void APressurePlate::Tick(float DeltaTime)
 		if (Activated)
 		{
 			Activated = false;
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, "Disattivata");
 			OnDeactivated.Broadcast();
 		}
 	}

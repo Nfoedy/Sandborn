@@ -70,6 +70,9 @@ void ACollectableKey::Tick(float DeltaTime)
 
 void ACollectableKey::Collect()
 {
+
+	if (IsCollected) return;
+
 	IsCollected = true;
 
 	OnCollected.Broadcast();

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Transporter.h"
 #include "Components/StaticMeshComponent.h"
 #include "PressurePlate.generated.h"
 
@@ -40,6 +41,10 @@ public:
 	// Mesh
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
+
+	// Transporter component 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UTransporter* Transporter;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool Activated;
