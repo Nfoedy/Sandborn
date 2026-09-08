@@ -24,4 +24,24 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
+	// Scene component
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USceneComponent* RootComp;
+
+	// Mesh component
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UStaticMeshComponent* Mesh;
+
+	// Transporter component
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UAutoTransporter* AutoTransporter;
+
+	// Arrow Point 1 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UArrowComponent* Point1;
+
+	// Arrow Point 2
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UArrowComponent* Point2;
+
 };
