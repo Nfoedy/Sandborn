@@ -49,6 +49,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* DebugDamageAction;
+
 public:
 
 	/** Constructor */
@@ -92,5 +95,29 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int CollectedCoins;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int Health;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int MaxHealth;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool IsDead;
+
+public: 
+
+	void AddCoin();
+
+	void LoseHealth();
+
+	void Die();
+
+
 };
 

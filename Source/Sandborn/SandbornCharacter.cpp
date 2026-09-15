@@ -2,6 +2,7 @@
 
 #include "SandbornCharacter.h"
 #include "Engine/LocalPlayer.h"
+#include "Engine/Engine.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -49,6 +50,16 @@ ASandbornCharacter::ASandbornCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	// Coin
+	CollectedCoins = 0;
+
+	// Health
+	Health = 3;
+	MaxHealth = 5;
+
+	// Dead
+	IsDead = false;
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -59,7 +70,7 @@ void ASandbornCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ASandbornCharacter::DoJumpStart);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -68,6 +79,9 @@ void ASandbornCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASandbornCharacter::Look);
+		
+		EnhancedInputComponent->BindAction(DebugDamageAction, ETriggerEvent::Started, this, &ASandbornCharacter::LoseHealth);
+
 	}
 	else
 	{
@@ -95,6 +109,8 @@ void ASandbornCharacter::Look(const FInputActionValue& Value)
 
 void ASandbornCharacter::DoMove(float Right, float Forward)
 {
+	if (IsDead) return;
+
 	if (GetController() != nullptr)
 	{
 		// find out which way is forward
@@ -110,6 +126,7 @@ void ASandbornCharacter::DoMove(float Right, float Forward)
 		// add movement 
 		AddMovementInput(ForwardDirection, Forward);
 		AddMovementInput(RightDirection, Right);
+
 	}
 }
 
@@ -125,6 +142,8 @@ void ASandbornCharacter::DoLook(float Yaw, float Pitch)
 
 void ASandbornCharacter::DoJumpStart()
 {
+	if (IsDead) return;
+
 	// signal the character to jump
 	Jump();
 }
@@ -133,4 +152,57 @@ void ASandbornCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void ASandbornCharacter::AddCoin()
+{
+	CollectedCoins++;
+	if (CollectedCoins % 10 == 0)
+	{
+		if (Health < MaxHealth)
+		{
+			Health++;
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Vite: %d"), Health));
+
+		}
+	}
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Monete raccolte: %d"), CollectedCoins));
+	}
+
+}
+
+
+void ASandbornCharacter::LoseHealth()
+{
+	if (Health <= 0) return;
+	
+	Health--;
+
+	if (Health == 0)
+	{
+		Die();
+	}
+
+	if (GEngine) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Numero Vite: %d"), Health));
+	}
+	
+}
+
+
+void ASandbornCharacter::Die()
+{
+	if (IsDead) return;
+
+	IsDead = true;
+	if (GEngine)
+	{	
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("GAME OVER"));
+	}
+
+
 }
