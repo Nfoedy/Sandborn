@@ -2,46 +2,50 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CollectableKey.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
 #include "CollectableKeyHolder.generated.h"
+
 
 UCLASS()
 class SANDBORN_API ACollectableKeyHolder : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	
+
+
+public:
+
 	ACollectableKeyHolder();
 
-protected:
-	
-	virtual void BeginPlay() override;
-
-public:	
-	
 	virtual void Tick(float DeltaTime) override;
 
-	// Key mesh rotation speed
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	void ActivateKey(UStaticMesh* NewKeyMesh);
+
+
+protected:
+
+	virtual void BeginPlay() override;
+
+
+public:
+
+	// Settings
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float KeyMeshRotationSpeed;
 
-	// Root Component
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	int32 HolderIndex;
+
+
+private:
+
+	// Components
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* RootComp;
 
-	// Mesh component
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
 
-	// Key mesh component
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* KeyMesh;
-
-	// KeyRef
-	UPROPERTY(EditInstanceOnly)
-	ACollectableKey* KeyRef;
-
-	UFUNCTION()
-	void ActivateKeyMesh();
 };

@@ -8,7 +8,7 @@
 #include "CollectableKey.generated.h"
 
 
-// DELEGATES
+// Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCollectableKeyOnCollected);
 
 
@@ -17,42 +17,49 @@ class SANDBORN_API ACollectableKey : public AActor
 {
 	GENERATED_BODY()
 
+
 public:
 
 	ACollectableKey();
 
-protected:
-
-	virtual void BeginPlay() override;
-
-public:
-
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float RotationSpeed;
+	// Delegate
+	UPROPERTY(BlueprintAssignable)
+	FCollectableKeyOnCollected OnCollected;
 
-	// Scene component
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	USceneComponent* RootComp;
 
-	// Capsule component
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	UCapsuleComponent* Capsule;
-
-	// Static Mesh component 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
-
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	bool IsCollected;
-
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	UAudioComponent* CollectAudio;
+protected:
 
 	void Collect();
 
-	// Delegates
-	UPROPERTY(BlueprintAssignable)
-	FCollectableKeyOnCollected OnCollected;
+
+public:
+
+	// Settings
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RotationSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 KeyIndex;
+
+	// State
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool IsCollected;
+
+
+private:
+
+	// Components
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* RootComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* Capsule;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UAudioComponent* CollectAudio;
 };

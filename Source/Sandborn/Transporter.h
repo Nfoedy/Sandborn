@@ -4,6 +4,8 @@
 #include "Components/ActorComponent.h"
 #include "Transporter.generated.h"
 
+class ACollectableKey;
+
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SANDBORN_API UTransporter : public UActorComponent
@@ -27,6 +29,8 @@ public:
 
 	bool ArePointsSet;
 
+	TArray<bool> SpawnedKeyTriggerStates;
+
 	UPROPERTY(EditAnywhere)
 	float MoveTime;
 
@@ -42,6 +46,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool AllTriggerActorsTriggered;
 
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<ACollectableKey>> SpawnedKeyTriggers;
+
 	UFUNCTION(BlueprintCallable)
 	void SetPoints(FVector Point1, FVector Point2);
 
@@ -50,4 +57,7 @@ public:
 
 	UFUNCTION()
 	void OnTriggerActorDeactivated();
+
+	UFUNCTION()
+	void OnSpawnedKeyCollected(UClass* KeyClass);
 };

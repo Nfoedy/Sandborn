@@ -6,75 +6,76 @@ ACollectableKey::ACollectableKey()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	IsCollected = false;
-
-	//
+	// Root
 	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
 	SetRootComponent(RootComp);
 
-	//
+	// Mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComp);
-	Mesh->SetCollisionProfileName(FName("OverlapAllDynamic"));
+	Mesh->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 
-	//
+	// Collection Capsule
 	Capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
 	Capsule->SetupAttachment(RootComp);
-	Capsule->SetCollisionProfileName(FName("OverlapAllDynamic"));
+	Capsule->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	Capsule->SetCapsuleHalfHeight(150.0f);
 	Capsule->SetCapsuleRadius(100.0f);
 
-	// 
+	// Audio
 	CollectAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("CollectAudio"));
 	CollectAudio->SetupAttachment(RootComp);
 	CollectAudio->SetAutoActivate(false);
 
-	//
-	RotationSpeed = 100;
+	// Settings
+	RotationSpeed = 100.0f;
+	KeyIndex = 1;
+
+	// State
+	IsCollected = false;
 }
 
-
-void ACollectableKey::BeginPlay()
-{
-	Super::BeginPlay();
-}
 
 
 void ACollectableKey::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Rotate the mesh
+	if (IsCollected) return;
+
+	// Rotate Key
 	Mesh->AddRelativeRotation(FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f));
 
-	TArray<AActor*> OverlapActors;
+	// Check Player overlap
+	TArray<AActor*> OverlappingActors;
 
-	Capsule->GetOverlappingActors(OverlapActors, ASandbornCharacter::StaticClass());
+	Capsule->GetOverlappingActors(OverlappingActors, ASandbornCharacter::StaticClass());
 
-	if (OverlapActors.Num() > 0)
-	{
-		// Il player sta attraversando la capsula
+	if (OverlappingActors.IsEmpty()) return;
 
-		if (!IsCollected)
-		{
-			Collect();
-		}
-	}
+	ASandbornCharacter* Player = Cast<ASandbornCharacter>(OverlappingActors[0]);
+	if (!Player) return;
+
+	Player->AddKey(KeyIndex, Mesh->GetStaticMesh(),	GetClass());
+
+	Collect();
 }
+
 
 
 void ACollectableKey::Collect()
 {
-
 	if (IsCollected) return;
 
 	IsCollected = true;
 
+	// Notify 
 	OnCollected.Broadcast();
 
 	Mesh->SetVisibility(false);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	// Audio
 	CollectAudio->Play();
 }
