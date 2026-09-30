@@ -29,6 +29,8 @@ public:
 
 	virtual UPawnMovementComponent* GetMovementComponent() const override;
 
+	virtual void HandleStomp();
+
 	// Attack
 	void StartAttack();
 	void PerformAttackHit();

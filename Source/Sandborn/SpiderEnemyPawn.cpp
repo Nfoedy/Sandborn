@@ -291,7 +291,7 @@ void ASpiderEnemyPawn::OnStompOverlap(
 
 	if (PlayerCharacter->GetActorLocation().Z <=GetActorLocation().Z) return;
 
-	Die();
+	HandleStomp();
 }
 
 
@@ -378,4 +378,11 @@ void ASpiderEnemyPawn::DropKey()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor<ACollectableKey>(DroppedKeyClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+}
+
+
+
+void ASpiderEnemyPawn::HandleStomp()
+{
+	Die();
 }
