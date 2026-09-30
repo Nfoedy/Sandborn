@@ -133,7 +133,7 @@ private:
 
 
 	// Drop
-	UPROPERTY(EditInstanceOnly, Category = "Spider|Drop")
+	UPROPERTY(EditAnywhere, Category = "Spider|Drop")
 	TSubclassOf<ACollectableKey> DroppedKeyClass;
 
 	UPROPERTY(EditAnywhere, Category = "Spider|Drop")

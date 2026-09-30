@@ -5,8 +5,8 @@
 
 ASpiderBoss::ASpiderBoss()
 {
-	MaxHealth = 5;
-	Health = 5;
+	MaxHealth = 3;
+	Health = 3;
 }
 
 
