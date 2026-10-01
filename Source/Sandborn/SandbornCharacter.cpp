@@ -176,6 +176,11 @@ void ASandbornCharacter::AddCoin()
 
 void ASandbornCharacter::AddKey(int32 KeyIndex, UStaticMesh* KeyMesh, UClass* KeyClass)
 {
+	if (!CollectedKeyIndices.Contains(KeyIndex))
+	{
+		CollectedKeyIndices.Add(KeyIndex);
+	}
+
 	if (KeyClass)
 	{
 		OnKeyCollected.Broadcast(KeyClass);
@@ -260,4 +265,35 @@ void ASandbornCharacter::Die()
 void ASandbornCharacter::FinishDeath()
 {
 	UGameplayStatics::SetGamePaused(this, true);
+}
+
+
+int32 ASandbornCharacter::GetHealth() const
+{
+	return Health;
+}
+
+
+int32 ASandbornCharacter::GetCoins() const
+{
+	return CollectedCoins;
+}
+
+
+void ASandbornCharacter::RestoreSavedStats(int32 SavedHealth, int32 SavedCoins)
+{
+	Health = FMath::Clamp(SavedHealth, 0, MaxHealth);
+	CollectedCoins = FMath::Max(0, SavedCoins);
+}
+
+const TArray<int32>& ASandbornCharacter::GetCollectedKeyIndices() const
+{
+	return CollectedKeyIndices;
+}
+
+void ASandbornCharacter::RestoreCollectedKeys(const TArray<int32>& SavedKeyIndices)
+{
+	CollectedKeyIndices = SavedKeyIndices;
+
+	CollectedKeys = CollectedKeyIndices.Num();
 }

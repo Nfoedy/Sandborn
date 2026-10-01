@@ -6,6 +6,9 @@
 #include "Engine/LocalPlayer.h"
 #include "InputMappingContext.h"
 #include "Blueprint/UserWidget.h"
+#include "EnhancedInputComponent.h"
+#include "InputAction.h"
+#include "Kismet/GameplayStatics.h"
 #include "Sandborn.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
@@ -33,6 +36,7 @@ void ASandbornPlayerController::BeginPlay()
 	}
 }
 
+
 void ASandbornPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -58,10 +62,28 @@ void ASandbornPlayerController::SetupInputComponent()
 			}
 		}
 	}
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+	{
+		if (PauseAction)
+		{
+			EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &ASandbornPlayerController::PauseGame);
+		}
+	}
 }
 
 bool ASandbornPlayerController::ShouldUseTouchControls() const
 {
 	// are we on a mobile platform? Should we force touch?
 	return SVirtualJoystick::ShouldDisplayTouchInterface() || bForceTouchControls;
+}
+
+
+void ASandbornPlayerController::PauseGame()
+{
+	if (UGameplayStatics::IsGamePaused(this)) return;
+
+	UGameplayStatics::SetGamePaused(this, true);
+
+	OnPauseOpened();
 }

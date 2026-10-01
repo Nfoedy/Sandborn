@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UUserWidget;
+class UInputAction;
 
 /**
  *  Basic PlayerController class for a third person game
@@ -48,5 +49,14 @@ protected:
 
 	/** Returns true if the player should use UMG touch controls */
 	bool ShouldUseTouchControls() const;
+
+	// Pause
+	UPROPERTY(EditAnywhere, Category = "Input|Pause")
+	UInputAction* PauseAction;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Pause")
+	void OnPauseOpened();
+
+	void PauseGame();
 
 };

@@ -75,6 +75,13 @@ public:
 		return FollowCamera;
 	}
 
+	int32 GetHealth() const;
+	int32 GetCoins() const;
+	const TArray<int32>& GetCollectedKeyIndices() const;
+
+	void RestoreSavedStats(int32 SavedHealth, int32 SavedCoins);
+	void RestoreCollectedKeys(const TArray<int32>& SavedKeyIndices);
+
 
 protected:
 
@@ -127,8 +134,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	int32 MaxKeys;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<int32> CollectedKeyIndices;
+
 	UPROPERTY()
 	TArray<ACollectableKeyHolder*> KeyHolders;
+
 
 
 	// Health
@@ -148,4 +159,6 @@ private:
 
 
 	void FinishDeath();
+
+
 };

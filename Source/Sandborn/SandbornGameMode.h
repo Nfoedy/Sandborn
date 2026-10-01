@@ -17,8 +17,19 @@ public:
 
 	void Victory();
 
+	// Save System
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	bool SaveCurrentGame();
+
+	// Load System
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	bool LoadCurrentGame();
+
 
 protected:
+
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Match")
 	void OnVictory();
@@ -27,4 +38,10 @@ protected:
 private:
 
 	bool bGameFinished;
+
+	bool bShouldLoadSave;
+
+	// Save Settings
+	UPROPERTY(EditDefaultsOnly, Category = "Save")
+	FString SaveSlotName = TEXT("SandbornSave");
 };
