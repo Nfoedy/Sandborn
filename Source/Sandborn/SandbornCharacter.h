@@ -18,6 +18,9 @@ struct FInputActionValue;
 
 // Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKeyCollectedEvent, UClass*, KeyClass);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FHealthChangedEvent, int32, CurrentHealth, int32, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCoinsChangedEvent, int32, CurrentCoins);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FKeysChangedEvent, int32, CurrentKeys, int32, MaxKeys);
 
 
 UCLASS(abstract)
@@ -64,6 +67,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsDead;
 
+	// HUD Events
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FHealthChangedEvent OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FCoinsChangedEvent OnCoinsChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FKeysChangedEvent OnKeysChanged;
+
 
 	// Getters	
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const
@@ -76,8 +89,21 @@ public:
 		return FollowCamera;
 	}
 
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
 	int32 GetHealth() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
 	int32 GetCoins() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetMaxHealth() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetCollectedKeys() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetMaxKeys() const;
+
 	const TArray<int32>& GetCollectedKeyIndices() const;
 
 	void RestoreSavedStats(int32 SavedHealth, int32 SavedCoins);

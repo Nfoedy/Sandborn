@@ -169,8 +169,11 @@ void ASandbornCharacter::AddCoin()
 	if (CollectedCoins % 10 == 0 && Health < MaxHealth)
 	{
 		Health++;
+
+		OnHealthChanged.Broadcast(Health, MaxHealth);
 	}
 
+	OnCoinsChanged.Broadcast(CollectedCoins);
 }
 
 
@@ -193,6 +196,8 @@ void ASandbornCharacter::AddKey(int32 KeyIndex, UStaticMesh* KeyMesh, UClass* Ke
 
 	CollectedKeys++;
 
+	OnKeysChanged.Broadcast(CollectedKeys, MaxKeys);
+
 	for (ACollectableKeyHolder* Holder : KeyHolders)
 	{
 		if (Holder && Holder->HolderIndex == CollectedKeys)
@@ -210,6 +215,8 @@ void ASandbornCharacter::LoseHealth()
 	if (Health <= 0) return;
 
 	Health--;
+
+	OnHealthChanged.Broadcast(Health, MaxHealth);
 
 	if (Health == 0)
 	{
@@ -230,6 +237,8 @@ float ASandbornCharacter::TakeDamage(float DamageAmount, const FDamageEvent& Dam
 	const int32 DamageToHealth = FMath::RoundToInt(ActualDamage);
 
 	Health = FMath::Clamp(Health - DamageToHealth, 0, MaxHealth);
+
+	OnHealthChanged.Broadcast(Health, MaxHealth);
 
 	if (Health <= 0)
 	{
@@ -284,8 +293,12 @@ int32 ASandbornCharacter::GetCoins() const
 
 void ASandbornCharacter::RestoreSavedStats(int32 SavedHealth, int32 SavedCoins)
 {
-	Health = FMath::Clamp(SavedHealth, 0, MaxHealth);
+	Health = FMath::Clamp(	SavedHealth, 0,	MaxHealth);
+
 	CollectedCoins = FMath::Max(0, SavedCoins);
+
+	OnHealthChanged.Broadcast(Health, MaxHealth);
+	OnCoinsChanged.Broadcast(CollectedCoins);
 }
 
 const TArray<int32>& ASandbornCharacter::GetCollectedKeyIndices() const
@@ -314,4 +327,24 @@ void ASandbornCharacter::RestoreCollectedKeys(const TArray<int32>& SavedKeyIndic
 			}
 		}
 	}
+
+	OnKeysChanged.Broadcast(CollectedKeys, MaxKeys);
+}
+
+
+int32 ASandbornCharacter::GetMaxHealth() const
+{
+	return MaxHealth;
+}
+
+
+int32 ASandbornCharacter::GetCollectedKeys() const
+{
+	return CollectedKeys;
+}
+
+
+int32 ASandbornCharacter::GetMaxKeys() const
+{
+	return MaxKeys;
 }

@@ -5,6 +5,8 @@
 #include "SpiderBoss.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBossHealthChangedEvent, int32, CurrentHealth, int32, MaxHealth);
+
 UCLASS()
 class SANDBORN_API ASpiderBoss : public ASpiderEnemyPawn
 {
@@ -18,8 +20,10 @@ public:
 	virtual void HandleStomp() override;
 
 	int32 GetHealthForSave() const;
-
 	void RestoreHealth(int32 SavedHealth);
+
+	UPROPERTY(BlueprintAssignable, Category = "Boss|Health")
+	FBossHealthChangedEvent OnBossHealthChanged;
 
 
 protected:

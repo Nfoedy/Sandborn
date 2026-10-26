@@ -1,5 +1,6 @@
 #include "BossSpawner.h"
 #include "PressurePlate.h"
+#include "SpiderBoss.h"
 #include "Components/SceneComponent.h"
 #include "GameFramework/Pawn.h"
 
@@ -56,6 +57,10 @@ APawn* ABossSpawner::SpawnBossInternal()
 	if (SpawnedBoss)
 	{
 		bHasSpawned = true;
+		if (ASpiderBoss* Boss = Cast<ASpiderBoss>(SpawnedBoss))
+		{
+			OnBossSpawned.Broadcast(Boss);
+		}
 	}
 
 	return SpawnedBoss;

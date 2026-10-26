@@ -5,6 +5,11 @@
 #include "BossSpawner.generated.h"
 
 
+class ASpiderBoss;
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBossSpawnedEvent, ASpiderBoss*, Boss);
+
 class APressurePlate;
 class APawn;
 class USceneComponent;
@@ -22,6 +27,9 @@ public:
 
 	APawn* SpawnBossFromSave();
 	bool HasSpawned() const;
+
+	UPROPERTY(BlueprintAssignable, Category = "Boss Spawner")
+	FBossSpawnedEvent OnBossSpawned;
 
 
 protected:

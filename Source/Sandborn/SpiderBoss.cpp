@@ -24,6 +24,8 @@ void ASpiderBoss::HandleStomp()
 
 	Health--;
 
+	OnBossHealthChanged.Broadcast(Health, MaxHealth);
+
 
 	if (GEngine)
 	{
@@ -56,4 +58,6 @@ int32 ASpiderBoss::GetHealthForSave() const
 void ASpiderBoss::RestoreHealth(int32 SavedHealth)
 {
 	Health = FMath::Clamp(SavedHealth, 0, MaxHealth);
+
+	OnBossHealthChanged.Broadcast(Health,MaxHealth);
 }
