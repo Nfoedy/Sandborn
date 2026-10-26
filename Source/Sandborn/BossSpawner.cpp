@@ -1,7 +1,5 @@
 #include "BossSpawner.h"
-
 #include "PressurePlate.h"
-
 #include "Components/SceneComponent.h"
 #include "GameFramework/Pawn.h"
 
@@ -12,6 +10,7 @@ ABossSpawner::ABossSpawner()
 
 	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
 	SetRootComponent(RootComp);
+
 	bHasSpawned = false;
 }
 
@@ -29,14 +28,35 @@ void ABossSpawner::BeginPlay()
 
 void ABossSpawner::SpawnBoss()
 {
-	if (bHasSpawned) return;
-	if (!BossClass) return;
+	SpawnBossInternal();
+}
 
-	bHasSpawned = true;
+
+APawn* ABossSpawner::SpawnBossFromSave()
+{
+	return SpawnBossInternal();
+}
+
+
+bool ABossSpawner::HasSpawned() const
+{
+	return bHasSpawned;
+}
+
+
+APawn* ABossSpawner::SpawnBossInternal()
+{
+	if (bHasSpawned) return nullptr;
+	if (!BossClass) return nullptr;
 
 	FActorSpawnParameters SpawnParams;
-
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	GetWorld()->SpawnActor<APawn>(BossClass,GetActorLocation(), GetActorRotation(), SpawnParams);
+	APawn* SpawnedBoss = GetWorld()->SpawnActor<APawn>(BossClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+	if (SpawnedBoss)
+	{
+		bHasSpawned = true;
+	}
+
+	return SpawnedBoss;
 }

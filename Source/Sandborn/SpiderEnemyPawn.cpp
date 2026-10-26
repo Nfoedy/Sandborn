@@ -401,7 +401,7 @@ bool ASpiderEnemyPawn::IsDeadForSave() const
 }
 
 
-void ASpiderEnemyPawn::RestoreDeadState()
+void ASpiderEnemyPawn::RestoreDeadState(bool bKeyWasCollected)
 {
 	if (bIsDead) return;
 
@@ -409,7 +409,7 @@ void ASpiderEnemyPawn::RestoreDeadState()
 	bIsAttacking = false;
 	bCanAttack = false;
 
-	bHasDroppedKey = true;
+	bHasDroppedKey = bKeyWasCollected;
 
 	if (MovementComponent)
 	{
@@ -422,7 +422,6 @@ void ASpiderEnemyPawn::RestoreDeadState()
 		AIController->StopMovement();
 		AIController->UnPossess();
 	}
-
 
 	if (CollisionBox)
 	{
@@ -451,4 +450,22 @@ void ASpiderEnemyPawn::RestoreDeadState()
 			AnimInstance->Montage_Play(DeathMontage);
 		}
 	}
+}
+
+
+int32 ASpiderEnemyPawn::GetDroppedKeyIndex() const
+{
+	if (!DroppedKeyClass)
+	{
+		return INDEX_NONE;
+	}
+
+	const ACollectableKey* KeyDefaults = DroppedKeyClass->GetDefaultObject<ACollectableKey>();
+
+	if (!KeyDefaults)
+	{
+		return INDEX_NONE;
+	}
+
+	return KeyDefaults->GetKeyIndex();
 }

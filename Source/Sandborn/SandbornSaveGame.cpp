@@ -8,4 +8,10 @@ USandbornSaveGame::USandbornSaveGame()
 
 	PlayerHealth = 3;
 	PlayerCoins = 0;
+
+	bBossSpawned = false;
+	bBossDead = false;
+
+	BossHealth = 3;
+	BossTransform = FTransform::Identity;
 }

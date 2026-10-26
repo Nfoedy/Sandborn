@@ -17,6 +17,10 @@ public:
 
 	virtual void HandleStomp() override;
 
+	int32 GetHealthForSave() const;
+
+	void RestoreHealth(int32 SavedHealth);
+
 
 protected:
 

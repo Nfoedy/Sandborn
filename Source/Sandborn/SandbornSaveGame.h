@@ -36,4 +36,18 @@ public:
 	 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|World")
 	TMap<int32, FTransform> DeadSpiderTransforms;
+
+
+	// Boss
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|Boss")
+	bool bBossSpawned;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|Boss")
+	bool bBossDead;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|Boss")
+	int32 BossHealth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|Boss")
+	FTransform BossTransform;
 };

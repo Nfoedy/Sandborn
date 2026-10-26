@@ -31,6 +31,8 @@ public:
 
 	virtual void HandleStomp();
 
+	int32 GetDroppedKeyIndex() const;
+
 	// Attack
 	void StartAttack();
 	void PerformAttackHit();
@@ -46,7 +48,7 @@ public:
 	// Save
 	int32 GetSaveId() const;
 	bool IsDeadForSave() const;
-	void RestoreDeadState();
+	void RestoreDeadState(bool bKeyWasCollected);
 
 
 private:

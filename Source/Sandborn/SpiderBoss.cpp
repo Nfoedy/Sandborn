@@ -45,3 +45,15 @@ void ASpiderBoss::HandleStomp()
 		Die();
 	}
 }
+
+
+int32 ASpiderBoss::GetHealthForSave() const
+{
+	return Health;
+}
+
+
+void ASpiderBoss::RestoreHealth(int32 SavedHealth)
+{
+	Health = FMath::Clamp(SavedHealth, 0, MaxHealth);
+}

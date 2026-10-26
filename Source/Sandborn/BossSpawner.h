@@ -20,6 +20,9 @@ public:
 
 	ABossSpawner();
 
+	APawn* SpawnBossFromSave();
+	bool HasSpawned() const;
+
 
 protected:
 
@@ -45,4 +48,6 @@ private:
 
 	UFUNCTION()
 	void SpawnBoss();
+
+	APawn* SpawnBossInternal();
 };
