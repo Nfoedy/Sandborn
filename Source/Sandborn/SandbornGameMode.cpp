@@ -198,3 +198,15 @@ bool ASandbornGameMode::LoadCurrentGame()
 
 	return true;
 }
+
+
+void ASandbornGameMode::GameOver()
+{
+	if (bGameFinished) return;
+
+	bGameFinished = true;
+
+	OnGameOver();
+
+	UGameplayStatics::SetGamePaused(this, true);
+}

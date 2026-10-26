@@ -16,6 +16,7 @@ public:
 	ASandbornGameMode();
 
 	void Victory();
+	void GameOver();
 
 	// Save System
 	UFUNCTION(BlueprintCallable, Category = "Save")
@@ -33,6 +34,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Match")
 	void OnVictory();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Match")
+	void OnGameOver();
 
 
 private:

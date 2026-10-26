@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
+#include "SandbornGameMode.h"
 #include "CollectableKey.h"
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
@@ -275,9 +276,12 @@ void ASandbornCharacter::Die()
 
 void ASandbornCharacter::FinishDeath()
 {
-	UGameplayStatics::SetGamePaused(this, true);
+	ASandbornGameMode* GameMode = Cast<ASandbornGameMode>(UGameplayStatics::GetGameMode(this));
+	if (GameMode)
+	{
+		GameMode->GameOver();
+	}
 }
-
 
 int32 ASandbornCharacter::GetHealth() const
 {
