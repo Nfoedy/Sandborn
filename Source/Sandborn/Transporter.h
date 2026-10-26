@@ -5,6 +5,7 @@
 #include "Transporter.generated.h"
 
 class ACollectableKey;
+class UStaticMesh;
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -60,4 +61,8 @@ public:
 
 	UFUNCTION()
 	void OnSpawnedKeyCollected(UClass* KeyClass);
+
+	void RestoreCollectedKeys(const TArray<int32>& SavedKeyIndices);
+
+	UStaticMesh* FindKeyMeshByIndex(int32 KeyIndex) const;
 };

@@ -91,6 +91,7 @@ ASpiderEnemyPawn::ASpiderEnemyPawn()
 	// Death
 	DeathMontage = nullptr;
 	bIsDead = false;
+	SaveId = 0;
 
 
 	// Drop
@@ -385,4 +386,69 @@ void ASpiderEnemyPawn::DropKey()
 void ASpiderEnemyPawn::HandleStomp()
 {
 	Die();
+}
+
+
+int32 ASpiderEnemyPawn::GetSaveId() const
+{
+	return SaveId;
+}
+
+
+bool ASpiderEnemyPawn::IsDeadForSave() const
+{
+	return bIsDead;
+}
+
+
+void ASpiderEnemyPawn::RestoreDeadState()
+{
+	if (bIsDead) return;
+
+	bIsDead = true;
+	bIsAttacking = false;
+	bCanAttack = false;
+
+	bHasDroppedKey = true;
+
+	if (MovementComponent)
+	{
+		MovementComponent->StopMovementImmediately();
+		MovementComponent->Deactivate();
+	}
+
+	if (AAIController* AIController = Cast<AAIController>(GetController()))
+	{
+		AIController->StopMovement();
+		AIController->UnPossess();
+	}
+
+
+	if (CollisionBox)
+	{
+		CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (StompCollision)
+	{
+		StompCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (MovementCollision)
+	{
+		MovementCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (Mesh)
+	{
+		Mesh->bPauseAnims = false;
+	}
+
+	if (DeathMontage && Mesh)
+	{
+		if (UAnimInstance* AnimInstance = Mesh->GetAnimInstance())
+		{
+			AnimInstance->Montage_Play(DeathMontage);
+		}
+	}
 }

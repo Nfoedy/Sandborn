@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
+#include "CollectableKey.h"
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
@@ -176,10 +177,12 @@ void ASandbornCharacter::AddCoin()
 
 void ASandbornCharacter::AddKey(int32 KeyIndex, UStaticMesh* KeyMesh, UClass* KeyClass)
 {
-	if (!CollectedKeyIndices.Contains(KeyIndex))
+	if (CollectedKeyIndices.Contains(KeyIndex))
 	{
-		CollectedKeyIndices.Add(KeyIndex);
+		return;
 	}
+
+	CollectedKeyIndices.Add(KeyIndex);
 
 	if (KeyClass)
 	{
@@ -198,7 +201,6 @@ void ASandbornCharacter::AddKey(int32 KeyIndex, UStaticMesh* KeyMesh, UClass* Ke
 			break;
 		}
 	}
-
 }
 
 
@@ -293,7 +295,23 @@ const TArray<int32>& ASandbornCharacter::GetCollectedKeyIndices() const
 
 void ASandbornCharacter::RestoreCollectedKeys(const TArray<int32>& SavedKeyIndices)
 {
-	CollectedKeyIndices = SavedKeyIndices;
+	CollectedKeyIndices.Empty();
+	CollectedKeys = 0;
 
-	CollectedKeys = CollectedKeyIndices.Num();
+	for (int32 SavedKeyIndex : SavedKeyIndices)
+	{
+		for (const TSubclassOf<ACollectableKey>& KeyClass : KeyClasses)
+		{
+			if (!KeyClass) continue;
+
+			const ACollectableKey* KeyDefaults = KeyClass->GetDefaultObject<ACollectableKey>();
+			if (!KeyDefaults) continue;
+
+			if (KeyDefaults->GetKeyIndex() == SavedKeyIndex)
+			{
+				AddKey(SavedKeyIndex, KeyDefaults->GetKeyMesh(), KeyClass.Get());
+				break;
+			}
+		}
+	}
 }

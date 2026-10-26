@@ -51,7 +51,10 @@ void UTransporter::BeginPlay()
 		}
 	}
 
-	SpawnedKeyTriggerStates.Init(false, SpawnedKeyTriggers.Num());
+	if (SpawnedKeyTriggerStates.Num() != SpawnedKeyTriggers.Num())
+	{
+		SpawnedKeyTriggerStates.Init(false,	SpawnedKeyTriggers.Num());
+	}
 
 	ASandbornCharacter* Player = Cast<ASandbornCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (Player)
@@ -127,4 +130,61 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	const FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
 	
 	Owner->SetActorLocation(NewLocation);
+}
+
+
+void UTransporter::RestoreCollectedKeys(
+	const TArray<int32>& SavedKeyIndices
+)
+{
+	if (SpawnedKeyTriggerStates.Num() != SpawnedKeyTriggers.Num())
+	{
+		SpawnedKeyTriggerStates.Init(
+			false,
+			SpawnedKeyTriggers.Num()
+		);
+	}
+
+
+	for (int32 Index = 0; Index < SpawnedKeyTriggers.Num(); Index++)
+	{
+		if (SpawnedKeyTriggerStates[Index]) continue;
+		if (!SpawnedKeyTriggers[Index]) continue;
+
+
+		const ACollectableKey* KeyDefaults =
+			SpawnedKeyTriggers[Index]
+			->GetDefaultObject<ACollectableKey>();
+
+		if (!KeyDefaults) continue;
+
+
+		if (SavedKeyIndices.Contains(
+			KeyDefaults->GetKeyIndex()
+		))
+		{
+			SpawnedKeyTriggerStates[Index] = true;
+
+			ActivatedTriggerCount++;
+		}
+	}
+}
+
+
+UStaticMesh* UTransporter::FindKeyMeshByIndex(int32 KeyIndex) const
+{
+	for (const TSubclassOf<ACollectableKey>& KeyClass : SpawnedKeyTriggers)
+	{
+		if (!KeyClass) continue;
+
+		const ACollectableKey* KeyDefaults = KeyClass->GetDefaultObject<ACollectableKey>();
+		if (!KeyDefaults) continue;
+
+		if (KeyDefaults->GetKeyIndex() == KeyIndex)
+		{
+			return KeyDefaults->GetKeyMesh();
+		}
+	}
+
+	return nullptr;
 }

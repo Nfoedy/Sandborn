@@ -43,9 +43,13 @@ public:
 	void FreezeDeathPose();
 	void DropKey();
 
+	// Save
+	int32 GetSaveId() const;
+	bool IsDeadForSave() const;
+	void RestoreDeadState();
+
 
 private:
-
 
 	// Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -130,6 +134,11 @@ private:
 	UAnimMontage* DeathMontage;
 
 	bool bIsDead;
+
+
+	// Save
+	UPROPERTY(EditInstanceOnly, Category = "Spider|Save")
+	int32 SaveId;
 
 
 	// Drop

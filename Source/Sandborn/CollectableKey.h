@@ -47,6 +47,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool IsCollected;
 
+	int32 GetKeyIndex() const;
+
+	UStaticMesh* GetKeyMesh() const;
+
 
 private:
 

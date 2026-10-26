@@ -11,6 +11,7 @@ class UCameraComponent;
 class UInputAction;
 class UStaticMesh;
 class ACollectableKeyHolder;
+class ACollectableKey;
 
 struct FInputActionValue;
 
@@ -139,6 +140,9 @@ private:
 
 	UPROPERTY()
 	TArray<ACollectableKeyHolder*> KeyHolders;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player|Keys")
+	TArray<TSubclassOf<ACollectableKey>> KeyClasses;
 
 
 

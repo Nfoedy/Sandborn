@@ -79,3 +79,17 @@ void ACollectableKey::Collect()
 	// Audio
 	CollectAudio->Play();
 }
+
+
+int32 ACollectableKey::GetKeyIndex() const
+{
+	return KeyIndex;
+}
+
+
+UStaticMesh* ACollectableKey::GetKeyMesh() const
+{
+	if (!Mesh) return nullptr;
+
+	return Mesh->GetStaticMesh();
+}

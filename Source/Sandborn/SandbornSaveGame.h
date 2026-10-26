@@ -29,4 +29,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|Player")
 	TArray<int32> CollectedKeyIndices;
+
+	// Spiders
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|World")
+	TArray<int32> DeadSpiderIds;
+	 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, SaveGame, Category = "Save|World")
+	TMap<int32, FTransform> DeadSpiderTransforms;
 };
