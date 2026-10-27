@@ -469,3 +469,8 @@ int32 ASpiderEnemyPawn::GetDroppedKeyIndex() const
 
 	return KeyDefaults->GetKeyIndex();
 }
+
+bool ASpiderEnemyPawn::IsAttackInProgress() const
+{
+	return bIsAttacking;
+}

@@ -8,6 +8,7 @@
 
 class UAIPerceptionComponent;
 class UAISenseConfig_Sight;
+class UStateTreeAIComponent;
 
 
 UCLASS()
@@ -15,76 +16,34 @@ class SANDBORN_API ASpiderAIController : public AAIController
 {
 	GENERATED_BODY()
 
+public:
+
 	ASpiderAIController();
+
+	// Perception Data
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|Perception")
+	TObjectPtr<AActor> CurrentTarget;
+
 
 protected:
 
 	virtual void BeginPlay() override;
-	virtual void OnPossess(APawn* InPawn) override;
-	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
-
 
 private:
 
-	// Patrol System
-	void TryStartPatrol();
-	void MoveToRandomPoint();
-
-	FTimerHandle NavigationRetryTimer;
-	FTimerHandle PatrolTimer;
-	int32 NavigationRetryCount;
-
-	UPROPERTY(EditAnywhere)
-	float PatrolRadius;
-
-	UPROPERTY(EditAnywhere)
-	float PatrolWaitTime;
-
-	
-	// Stuck check
-	void StartStuckCheck();
-	void CheckIfStuck();
-
-	FTimerHandle StuckCheckTimer;
-	FVector LastCheckedLocation;
-	float CurrentStuckTime;
-	bool bRecoveringFromStuck;
-
-	UPROPERTY(EditAnywhere)
-	float MaxStuckTime;
-
-	UPROPERTY(EditAnywhere)
-	float StuckDistanceThreshold;
+	// StateTree
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|StateTree", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStateTreeAIComponent> StateTreeComponent;
 
 	// AI Perception
-	UPROPERTY(VisibleAnywhere)
-	UAIPerceptionComponent* AIPerception;
+	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
+	TObjectPtr<UAIPerceptionComponent> AIPerception;
 
-	UPROPERTY()
-	UAISenseConfig_Sight* SightConfig;
+	UPROPERTY(VisibleAnywhere, Category = "AI|Perception")
+	TObjectPtr<UAISenseConfig_Sight> SightConfig;
 
 
 	UFUNCTION()
 	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
-
-
-	// Chasing
-	bool bIsChasing;
-
-	AActor* CurrentTarget;
-
-	FTimerHandle ChaseTimer;
-
-	UPROPERTY(EditAnywhere, Category = "AI|Combat")
-	float AttackRange;
-
-	void UpdateChase();
-
-
-	// Attack
-
-	UPROPERTY(EditAnywhere)
-	float MoveAcceptanceRadius;
-
 
 };

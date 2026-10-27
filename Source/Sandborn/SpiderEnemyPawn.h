@@ -34,7 +34,12 @@ public:
 	int32 GetDroppedKeyIndex() const;
 
 	// Attack
+	UFUNCTION(BlueprintCallable, Category = "Spider|Combat")
 	void StartAttack();
+
+	UFUNCTION(BlueprintPure, Category = "Spider|Combat")
+	bool IsAttackInProgress() const;
+
 	void PerformAttackHit();
 	void EndAttack();
 	bool IsAttacking() const { return bIsAttacking; }
