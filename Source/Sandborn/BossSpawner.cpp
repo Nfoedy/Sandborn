@@ -54,9 +54,20 @@ APawn* ABossSpawner::SpawnBossInternal()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	APawn* SpawnedBoss = GetWorld()->SpawnActor<APawn>(BossClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+
 	if (SpawnedBoss)
 	{
 		bHasSpawned = true;
+
+		UE_LOG(
+			LogTemp,
+			Warning,
+			TEXT("[BOSS DEBUG] Boss: %s | Controller: %s"),
+			*GetNameSafe(SpawnedBoss),
+			*GetNameSafe(SpawnedBoss->GetController())
+		);
+
+
 		if (ASpiderBoss* Boss = Cast<ASpiderBoss>(SpawnedBoss))
 		{
 			OnBossSpawned.Broadcast(Boss);

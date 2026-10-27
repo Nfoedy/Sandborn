@@ -29,6 +29,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
+
 private:
 
 	// StateTree

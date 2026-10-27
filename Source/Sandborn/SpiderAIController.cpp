@@ -37,11 +37,6 @@ void ASpiderAIController::BeginPlay()
 	Super::BeginPlay();
 
 	AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &ASpiderAIController::OnTargetPerceptionUpdated);
-
-	if (StateTreeComponent)
-	{
-		StateTreeComponent->StartLogic();
-	}
 }
 
 
@@ -84,4 +79,29 @@ void ASpiderAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus S
 			);
 		}
 	}
+}
+
+
+void ASpiderAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (StateTreeComponent)
+	{
+		StateTreeComponent->StartLogic();
+	}
+}
+
+void ASpiderAIController::OnUnPossess()
+{
+	CurrentTarget = nullptr;
+
+	if (StateTreeComponent)
+	{
+		StateTreeComponent->StopLogic(
+			TEXT("AI Controller unpossessed")
+		);
+	}
+
+	Super::OnUnPossess();
 }
