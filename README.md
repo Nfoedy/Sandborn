@@ -161,7 +161,7 @@ Il risultato è un'organizzazione più modulare, nella quale differenti Actor po
 
 ## 📌 Final Considerations
 
-Lo sviluppo di **Sandborn** mi ha permesso di approfondire diversi aspetti del **Gameplay Programming in Unreal Engine**, lavorando principalmente attraverso il linguaggio C++.
+Lo sviluppo di Sandborn mi ha permesso di approfondire diversi aspetti del Gameplay Programming in Unreal Engine, lavorando principalmente attraverso il linguaggio C++.
 
 Una delle parti più importanti del progetto è stata l'integrazione tra sistemi differenti.
 
@@ -175,29 +175,7 @@ Un altro aspetto importante è stato collegare queste funzionalità tra loro: ad
 
 Questo mi ha permesso di comprendere meglio come costruire sistemi che non funzionino solamente in modo indipendente, ma che collaborino per creare un'esperienza di gameplay coerente.
 
-**Sandborn** rappresenta quindi un progetto di apprendimento e sperimentazione, attraverso il quale ho potuto consolidare le mie conoscenze di C++, Unreal Engine e organizzazione dei sistemi di gioco.
-
----
-
-## 🔮 Future Developments
-
-Il progetto è stato sviluppato principalmente con finalità didattiche, concentrandosi sull'implementazione dei sistemi di gameplay.
-
-Alcuni aspetti possono essere ulteriormente approfonditi e completati.
-
-Tra i possibili sviluppi futuri sono presenti:
-
-- **Clone Mechanic:** creazione di una copia del Character controllata attraverso gli stessi input del giocatore, da utilizzare per risolvere enigmi basati sull'attivazione simultanea di più Pressure Plates;
-- **Boss Fight:** completamento di uno scontro finale con un nemico caratterizzato da più punti salute e comportamenti differenti;
-- **Enemy AI:** miglioramento dei comportamenti di pattugliamento, inseguimento e combattimento;
-- **Enemy Death:** perfezionamento della gestione dei cadaveri e della loro permanenza nel livello;
-- **Save System:** estensione del salvataggio allo stato completo del mondo, includendo chiavi raccolte, nemici eliminati e progressione;
-- **Level Design:** realizzazione di percorsi più articolati e maggiore varietà di enigmi ambientali;
-- **Animations:** miglioramento delle animazioni e delle transizioni del Character e dei nemici;
-- **User Interface:** perfezionamento delle schermate e degli elementi visivi di gameplay;
-- **Audio and Visual Effects:** introduzione di ulteriori effetti per migliorare il feedback delle interazioni.
-
-Questi sviluppi permetterebbero di ampliare l'esperienza di gioco, mantenendo come obiettivo principale l'approfondimento del Gameplay Programming e delle funzionalità offerte da Unreal Engine.
+Sandborn rappresenta quindi un progetto di apprendimento e sperimentazione, attraverso il quale ho potuto consolidare le mie conoscenze di C++, Unreal Engine e organizzazione dei sistemi di gioco.
 
 ---
 
