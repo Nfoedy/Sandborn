@@ -202,3 +202,5 @@ Questi sviluppi permetterebbero di ampliare l'esperienza di gioco, mantenendo co
 ---
 
 ## 📸 Video & Media
+
+link: https://youtu.be/dwBMpM6Aox8
