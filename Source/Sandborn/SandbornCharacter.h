@@ -1,96 +1,194 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Logging/LogMacros.h"
+#include "TimerManager.h"
 #include "SandbornCharacter.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class UStaticMesh;
+class ACollectableKeyHolder;
+class ACollectableKey;
+
 struct FInputActionValue;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-/**
- *  A simple player-controllable third person character
- *  Implements a controllable orbiting camera
- */
+// Delegates
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKeyCollectedEvent, UClass*, KeyClass);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FHealthChangedEvent, int32, CurrentHealth, int32, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCoinsChangedEvent, int32, CurrentCoins);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FKeysChangedEvent, int32, CurrentKeys, int32, MaxKeys);
+
+
 UCLASS(abstract)
-class ASandbornCharacter : public ACharacter
+class SANDBORN_API ASandbornCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
 
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
+public:
+
+	ASandbornCharacter();
+
+	virtual float TakeDamage(float DamageAmount, const FDamageEvent& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	// Gameplay
+	void AddCoin();
+
+	void AddKey(int32 KeyIndex, UStaticMesh* KeyMesh, UClass* KeyClass);
+
+	void LoseHealth();
+
+	void Die();
+
 	
-protected:
-
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* JumpAction;
-
-	/** Move Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* MoveAction;
-
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* LookAction;
-
-	/** Mouse Look Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* MouseLookAction;
-
-public:
-
-	/** Constructor */
-	ASandbornCharacter();	
-
-protected:
-
-	/** Initialize input action bindings */
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-protected:
-
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
-
-public:
-
-	/** Handles move inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	// Input
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoMove(float Right, float Forward);
 
-	/** Handles look inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoLook(float Yaw, float Pitch);
 
-	/** Handles jump pressed inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoJumpStart();
 
-	/** Handles jump pressed inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoJumpEnd();
 
-public:
 
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	// Event
+	UPROPERTY(BlueprintAssignable, Category = "Player|Keys")
+	FKeyCollectedEvent OnKeyCollected;
 
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	// Death
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsDead;
+
+	// HUD Events
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FHealthChangedEvent OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FCoinsChangedEvent OnCoinsChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Player|HUD")
+	FKeysChangedEvent OnKeysChanged;
+
+
+	// Getters	
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const
+	{
+		return CameraBoom;
+	}
+
+	FORCEINLINE UCameraComponent* GetFollowCamera() const
+	{
+		return FollowCamera;
+	}
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetHealth() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetCoins() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetMaxHealth() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetCollectedKeys() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player|HUD")
+	int32 GetMaxKeys() const;
+
+	const TArray<int32>& GetCollectedKeyIndices() const;
+
+	void RestoreSavedStats(int32 SavedHealth, int32 SavedCoins);
+	void RestoreCollectedKeys(const TArray<int32>& SavedKeyIndices);
+
+
+protected:
+
+	virtual void BeginPlay() override;
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+
+private:
+
+	// Components
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FollowCamera;
+
+
+	// inputs
+	UPROPERTY(EditAnywhere)
+	UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* MouseLookAction;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* DebugDamageAction;
+
+
+	void Move(const FInputActionValue& Value);
+
+	void Look(const FInputActionValue& Value);
+
+
+	// Coins
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 CollectedCoins;
+
+
+	// Keys
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 CollectedKeys;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 MaxKeys;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<int32> CollectedKeyIndices;
+
+	UPROPERTY()
+	TArray<ACollectableKeyHolder*> KeyHolders;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player|Keys")
+	TArray<TSubclassOf<ACollectableKey>> KeyClasses;
+
+
+
+	// Health
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 Health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 MaxHealth;
+
+
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float GameOverDelay;
+
+	FTimerHandle GameOverTimer;
+
+
+	void FinishDeath();
+
+
 };
-

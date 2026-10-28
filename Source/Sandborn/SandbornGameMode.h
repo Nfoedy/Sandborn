@@ -1,24 +1,51 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "SandbornGameMode.generated.h"
 
-/**
- *  Simple GameMode for a third person game
- */
+
 UCLASS(abstract)
 class ASandbornGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+
 public:
-	
-	/** Constructor */
+
 	ASandbornGameMode();
+
+	void Victory();
+	void GameOver();
+
+	// Save System
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	bool SaveCurrentGame();
+
+	// Load System
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	bool LoadCurrentGame();
+
+
+protected:
+
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Match")
+	void OnVictory();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Match")
+	void OnGameOver();
+
+
+private:
+
+	bool bGameFinished;
+
+	bool bShouldLoadSave;
+
+	// Save Settings
+	UPROPERTY(EditDefaultsOnly, Category = "Save")
+	FString SaveSlotName = TEXT("SandbornSave");
 };
-
-
-
