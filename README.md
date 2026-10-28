@@ -29,8 +29,10 @@ Per questo motivo lo sviluppo si è concentrato soprattutto su:
 - Collectables e gestione della salute;
 - Character Movement e Double Jump;
 - Enemy AI e Navigation System;
+- StateTree per la gestione dei comportamenti dei nemici;
 - Animazioni e Animation Notifies;
 - Combattimento e gestione della morte;
+- Spawn dinamico di Actor;
 - Sistemi di salvataggio e progressione.
 
 Aspetti come **grafica, audio e level design** sono stati utilizzati principalmente per costruire un ambiente nel quale sperimentare e integrare le funzionalità tecniche sviluppate.
@@ -43,7 +45,7 @@ L'obiettivo era creare sistemi capaci di comunicare tra loro e contribuire alla 
 
 ### Player
 
-| Input | Azioni |
+| Input | Azione |
 |---|---|
 | `W A S D` | Movimento |
 | `Mouse` | Movimento della visuale |
@@ -86,9 +88,21 @@ Il giocatore incontra nemici che possono pattugliare determinate zone e inseguir
 
 Il sistema di combattimento si basa principalmente sul movimento del Character e sulla possibilità di eliminare i nemici attraverso lo Stomp.
 
+Oltre ai nemici standard, il livello include un **Boss** caratterizzato da più punti salute e da comportamenti differenti in base alla salute rimanente.
+
+Durante lo scontro il Boss può modificare il proprio comportamento, aumentando la pressione sul giocatore nelle fasi più avanzate del combattimento.
+
+### Save and Continue
+
+Il gioco permette di salvare la progressione e riprendere la partita dal Main Menu attraverso l'opzione **Continue**.
+
+Il sistema conserva lo stato del giocatore e diversi elementi della progressione del livello, permettendo di continuare la partita senza dover ricominciare dall'inizio.
+
 ### 🏆 Victory
 
 Il progetto prevede un sistema dedicato alla gestione della vittoria, utilizzato per riconoscere il completamento dell'obiettivo finale e concludere la partita.
+
+Una volta raggiunto l'obiettivo conclusivo viene mostrata una schermata dedicata alla vittoria.
 
 ### ❌ Defeat
 
@@ -96,7 +110,7 @@ Il giocatore possiede un sistema di salute che viene ridotta quando subisce dann
 
 Quando la salute raggiunge zero, viene avviata la sequenza di morte del Character.
 
-Il movimento e il salto vengono disabilitati, viene attivato il Ragdoll e, dopo un breve intervallo, la partita viene messa in pausa.
+Il movimento viene disabilitato, viene attivato il Ragdoll e, dopo un breve intervallo, viene mostrata la schermata di **Game Over**.
 
 ---
 
@@ -115,6 +129,7 @@ In particolare, il progetto ha richiesto di lavorare con:
 - Delegates;
 - Character Movement Component;
 - AI e Navigation System;
+- StateTree;
 - Animation Montages e Notifies;
 - Spawn dinamico di Actor;
 - SaveGame System.
@@ -153,7 +168,8 @@ Questo approccio è stato utilizzato soprattutto per:
 
 - Attivazione delle Pressure Plates;
 - Raccolta delle chiavi;
-- Comunicazione tra oggetti interattivi e sistemi di gameplay.
+- Comunicazione tra oggetti interattivi e sistemi di gameplay;
+- Aggiornamento di elementi legati alla progressione del giocatore.
 
 Il risultato è un'organizzazione più modulare, nella quale differenti Actor possono reagire agli stessi eventi mantenendo separate le proprie responsabilità.
 
@@ -161,7 +177,7 @@ Il risultato è un'organizzazione più modulare, nella quale differenti Actor po
 
 ## 📌 Final Considerations
 
-Lo sviluppo di Sandborn mi ha permesso di approfondire diversi aspetti del Gameplay Programming in Unreal Engine, lavorando principalmente attraverso il linguaggio C++.
+Lo sviluppo di **Sandborn** mi ha permesso di approfondire diversi aspetti del **Gameplay Programming in Unreal Engine**, lavorando principalmente attraverso il linguaggio C++.
 
 Una delle parti più importanti del progetto è stata l'integrazione tra sistemi differenti.
 
@@ -175,10 +191,11 @@ Un altro aspetto importante è stato collegare queste funzionalità tra loro: ad
 
 Questo mi ha permesso di comprendere meglio come costruire sistemi che non funzionino solamente in modo indipendente, ma che collaborino per creare un'esperienza di gameplay coerente.
 
-Sandborn rappresenta quindi un progetto di apprendimento e sperimentazione, attraverso il quale ho potuto consolidare le mie conoscenze di C++, Unreal Engine e organizzazione dei sistemi di gioco.
+**Sandborn** rappresenta quindi un progetto di apprendimento e sperimentazione, attraverso il quale ho potuto consolidare le mie conoscenze di C++, Unreal Engine e organizzazione dei sistemi di gioco.
 
 ---
 
 ## 📸 Video & Media
 
-link: https://youtu.be/dwBMpM6Aox8
+🎥 **Gameplay Video:**  
+https://youtu.be/dwBMpM6Aox8
