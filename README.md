@@ -197,5 +197,4 @@ Questo mi ha permesso di comprendere meglio come costruire sistemi che non funzi
 
 ## 📸 Video & Media
 
-🎥 **Gameplay Video:**  
-https://youtu.be/dwBMpM6Aox8
+Video gameplay: https://youtu.be/dwBMpM6Aox8
